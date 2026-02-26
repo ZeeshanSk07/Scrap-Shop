@@ -10,12 +10,12 @@ export default function Parts() {
     const fetchParts = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/sell/products"
+          "http://localhost:5000/api/parts"
         );
-
+        
         // ✅ Handle wrapped backend response
-        if (res.data.success) {
-          setParts(res.data.data);
+        if (res.status = 200) {
+          setParts(res.data);
         } else {
           setError(res.data.message || "Failed to load parts");
         }

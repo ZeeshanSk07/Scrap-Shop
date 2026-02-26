@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
 
-const vehicleSchema = new mongoose.Schema({
-  name: String,
-  model: String,
-  year: Number,
-  price: Number,
-  image: String
-}, { timestamps: true });
+const vehicleSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+    image: { type: String, required: true },
+    sold: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
 export default mongoose.model("Vehicle", vehicleSchema);

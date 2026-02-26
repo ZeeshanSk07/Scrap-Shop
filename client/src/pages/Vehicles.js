@@ -10,12 +10,12 @@ export default function Vehicles() {
     const fetchVehicles = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/sell/products"
+          "http://localhost:5000/api/vehicles"
         );
 
         // ✅ Handle wrapped backend response
-        if (res.data.success) {
-          setVehicles(res.data.data);
+        if (res.status = 200) {
+          setVehicles(res.data);
         } else {
           setError(res.data.message || "Failed to load vehicles");
         }

@@ -1,35 +1,53 @@
 import express from "express";
-import SellRequest from "../models/SellRequest.js";
-import upload from "../middleware/upload.js";
+import Sell from "../models/Sell.js";
+import multer from "multer";
 
 const router = express.Router();
 
-// User submits sell request with images
+const storage = multer.diskStorage({
+  destination: "uploads/",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+// Submit Sell Request
 router.post("/", upload.array("images", 5), async (req, res) => {
   try {
-    if (!req.files || req.files.length < 2) {
-      return res.status(400).json({ message: "Minimum 2 images required" });
-    }
+    const images = req.files.map((file) => file.filename);
 
-    const imagePaths = req.files.map(file => file.filename);
-
-    const request = new SellRequest({
-      ...req.body,
-      images: imagePaths
+    const sell = new Sell({
+      title: req.body.title,
+      description: req.body.description,
+      price: req.body.price,
+      images,
     });
 
-    await request.save();
-
-    res.json({ message: "Vehicle submitted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    await sell.save();
+    res.status(201).json({ message: "Sell request submitted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to submit request" });
   }
 });
 
-// Admin view
+// Admin view sell requests
 router.get("/admin", async (req, res) => {
-  const requests = await SellRequest.find();
-  res.json(requests);
+  const data = await Sell.find().sort({ createdAt: -1 });
+  res.json(data);
+});
+
+// Approve
+router.put("/approve/:id", async (req, res) => {
+  await Sell.findByIdAndUpdate(req.params.id, { status: "approved" });
+  res.json({ message: "Approved" });
+});
+
+// Reject
+router.put("/reject/:id", async (req, res) => {
+  await Sell.findByIdAndUpdate(req.params.id, { status: "rejected" });
+  res.json({ message: "Rejected" });
 });
 
 export default router;
