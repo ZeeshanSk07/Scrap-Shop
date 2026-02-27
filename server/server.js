@@ -7,13 +7,19 @@ import path from "path";
 import vehicleRoutes from "./routes/vehicleRoutes.js";
 import partRoutes from "./routes/partRoutes.js";
 import sellRoutes from "./routes/sellRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -30,3 +36,4 @@ mongoose.connect(process.env.MONGO_URI)
 app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/parts", partRoutes);
 app.use("/api/sell", sellRoutes);
+app.use("/api/categories", categoryRoutes);

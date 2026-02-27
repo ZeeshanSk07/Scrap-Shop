@@ -13,20 +13,34 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ✅ Add Part
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const part = new Part({
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required" });
+    }
+
+    const { name, vehicle, price, description } = req.body;
+
+    if (!name || !vehicle || !price || !description) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    const newPart = new Part({
+      name,
+      vehicle,
+      price,
+      description,
       image: req.file.filename,
     });
 
-    await part.save();
-    res.status(201).json({ message: "Part added successfully" });
+    await newPart.save();
+    res.status(201).json(newPart);
   } catch (err) {
-    res.status(500).json({ error: "Failed to add part" });
+  console.error(err);   // 👈 VERY IMPORTANT
+  res.status(500).json({ message: err.message });
   }
 });
 
