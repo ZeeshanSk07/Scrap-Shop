@@ -5,51 +5,96 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-gray-900 text-white sticky top-0 z-50 shadow-md">
-      <div className="flex justify-between items-center px-4 py-3">
-        
+    <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-lg border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+
         {/* Logo */}
-        <Link to="/" className="text-xl font-bold text-yellow-400">
-          ScrapMart 🚗
+        <Link
+          to="/"
+          className="text-2xl font-semibold tracking-tight text-white"
+        >
+          Scrap<span className="text-green-500 font-bold">Mart</span>
         </Link>
 
-        {/* Hamburger Button (Mobile) */}
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-10 text-[15px] font-medium text-gray-300">
+
+          <Link
+            to="/"
+            className="hover:text-white transition duration-300"
+          >
+            Home
+          </Link>
+
+          <Link
+            to="/vehicles"
+            className="hover:text-white transition duration-300"
+          >
+            Vehicles
+          </Link>
+
+          <Link
+            to="/parts"
+            className="hover:text-white transition duration-300"
+          >
+            Parts
+          </Link>
+
+          <Link
+            to="/sell"
+            className="hover:text-white transition duration-300"
+          >
+            Sell
+          </Link>
+
+          {/* CTA Button */}
+          <Link
+            to="/admin"
+            className="ml-4 px-6 py-2 rounded-full bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition shadow-md"
+          >
+            Admin
+          </Link>
+
+        </div>
+
+        {/* Mobile Button */}
         <button
-          className="md:hidden text-2xl"
           onClick={() => setOpen(!open)}
+          className="md:hidden text-2xl text-white"
         >
           ☰
         </button>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6">
-          <Link to="/" className="hover:text-yellow-400">Home</Link>
-          <Link to="/parts" className="hover:text-yellow-400">Parts</Link>
-          <Link to="/vehicles" className="hover:text-yellow-400">Vehicles</Link>
-          <Link to="/sell" className="hover:text-yellow-400">Sell</Link>
-          <Link
-            to="/admin"
-            className="bg-yellow-400 text-black px-3 py-1 rounded"
-          >
-            Admin
-          </Link>
-        </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden bg-gray-800 flex flex-col space-y-3 px-4 pb-4">
-          <Link to="/" onClick={() => setOpen(false)}>Home</Link>
-          <Link to="/parts" onClick={() => setOpen(false)}>Parts</Link>
-          <Link to="/vehicles" onClick={() => setOpen(false)}>Vehicles</Link>
-          <Link to="/sell" onClick={() => setOpen(false)}>Sell Vehicle</Link>
+        <div className="md:hidden bg-black border-t border-gray-800 px-8 py-6 flex flex-col gap-5 text-gray-300 font-medium">
+
+          <Link to="/" onClick={() => setOpen(false)}>
+            Home
+          </Link>
+
+          <Link to="/vehicles" onClick={() => setOpen(false)}>
+            Vehicles
+          </Link>
+
+          <Link to="/parts" onClick={() => setOpen(false)}>
+            Parts
+          </Link>
+
+          <Link to="/sell" onClick={() => setOpen(false)}>
+            Sell
+          </Link>
+
           <Link
             to="/admin"
             onClick={() => setOpen(false)}
-            className="bg-yellow-400 text-black px-3 py-2 rounded text-center"
+            className="mt-2 bg-green-600 text-white py-2 rounded-full text-center font-semibold"
           >
             Admin
           </Link>
+
         </div>
       )}
     </nav>

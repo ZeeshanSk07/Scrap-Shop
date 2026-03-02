@@ -11,11 +11,10 @@ export default function Vehicles() {
       try {
         const res = await axios.get("http://localhost:5000/api/vehicles");
 
-        // ✅ Handle wrapped backend response
-        if ((res.status = 200)) {
+        if (res.status === 200) {
           setVehicles(res.data);
         } else {
-          setError(res.data.message || "Failed to load vehicles");
+          setError("Failed to load vehicles");
         }
       } catch (err) {
         console.error(err);
@@ -29,35 +28,64 @@ export default function Vehicles() {
   }, []);
 
   if (loading) {
-    return <div className="p-6">Loading vehicles...</div>;
+    return (
+      <div className="pt-28 min-h-screen bg-black text-white flex items-center justify-center">
+        Loading vehicles...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+    return (
+      <div className="pt-28 min-h-screen bg-black text-red-500 flex items-center justify-center">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Available Vehicles</h1>
+    <div className="pt-28 min-h-screen bg-black text-white px-6">
+      <div className="max-w-7xl mx-auto">
 
-      {vehicles.length === 0 ? (
-        <p>No vehicles available as of now.</p>
-      ) : (
-        <div className="grid gap-3 md:grid-cols-2">
-          {vehicles.map((v) => (
-            <div key={v._id} className="bg-white w-full p-4 rounded shadow">
-              <img
-                src={`http://localhost:5000/uploads/${v.image}`}
-                alt={v.name}
-                className="w-72 h-60 object-cover rounded mb-3"
-              />
+        <h1 className="text-4xl font-semibold mb-12 text-center">
+          Available Vehicles
+        </h1>
 
-              <h3 className="font-semibold text-lg">{v.name}</h3>
-              <p className="text-gray-600">₹{v.price}</p>
-            </div>
-          ))}
-        </div>
-      )}
+        {vehicles.length === 0 ? (
+          <p className="text-center text-gray-400">
+            No vehicles available as of now.
+          </p>
+        ) : (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+
+            {vehicles.map((v) => (
+              <div
+                key={v._id}
+                className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group border border-gray-800"
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={`http://localhost:5000/uploads/${v.image}`}
+                    alt={v.name}
+                    className="w-full h-64 object-cover group-hover:scale-105 transition duration-500"
+                  />
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-2">
+                    {v.name}
+                  </h3>
+
+                  <p className="text-green-500 text-xl font-medium">
+                    ₹{v.price}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,33 +1,99 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const AdminLayout = () => {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      
-      <div style={{
-        width: "220px",
-        background: "#111",
-        color: "#fff",
-        padding: "20px"
-      }}>
-        <h2>Admin Panel</h2>
+    <div className="min-h-screen bg-gray-950 text-white flex">
 
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          <li><Link to="/admin">Dashboard</Link></li>
-          <li><Link to="vehicles">Vehicles</Link></li>
-          <li><Link to="categories">Vehicle Categories</Link></li>
-          <li><Link to="parts">Parts</Link></li>
-          <li><Link to="/admin/sell-requests">
-  
-    Sell Requests
-  
-</Link></li>
-        </ul>
-      </div>
+      {/* Sidebar */}
+      <aside className="hidden md:flex w-64 bg-gray-900 border-r border-gray-800 flex-col p-6">
 
-      <div style={{ flex: 1, padding: "30px" }}>
+        <h2 className="text-xl font-semibold mb-10">
+          Admin Panel
+        </h2>
+
+        <nav className="space-y-2">
+
+          <NavLink
+            to="/admin"
+            end
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-600"
+                  : "hover:bg-gray-800 text-gray-300"
+              }`
+            }
+          >
+            Dashboard
+          </NavLink>
+
+          <NavLink
+            to="vehicles"
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-600"
+                  : "hover:bg-gray-800 text-gray-300"
+              }`
+            }
+          >
+            Vehicles
+          </NavLink>
+
+          <NavLink
+            to="categories"
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-600"
+                  : "hover:bg-gray-800 text-gray-300"
+              }`
+            }
+          >
+            Categories
+          </NavLink>
+
+          <NavLink
+            to="parts"
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-600"
+                  : "hover:bg-gray-800 text-gray-300"
+              }`
+            }
+          >
+            Parts
+          </NavLink>
+
+          <NavLink
+            to="sell-requests"
+            className={({ isActive }) =>
+              `block px-4 py-3 rounded-lg transition ${
+                isActive
+                  ? "bg-blue-600"
+                  : "hover:bg-gray-800 text-gray-300"
+              }`
+            }
+          >
+            Sell Requests
+          </NavLink>
+
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 md:p-10 overflow-y-auto">
+
+        {/* Mobile Header */}
+        <div className="md:hidden mb-6">
+          <h2 className="text-xl font-semibold">
+            Admin Panel
+          </h2>
+        </div>
+
         <Outlet />
-      </div>
+      </main>
 
     </div>
   );

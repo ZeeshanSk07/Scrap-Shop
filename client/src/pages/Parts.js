@@ -11,11 +11,10 @@ export default function Parts() {
       try {
         const res = await axios.get("http://localhost:5000/api/parts");
 
-        // ✅ Handle wrapped backend response
-        if ((res.status = 200)) {
+        if (res.status === 200) {
           setParts(res.data);
         } else {
-          setError(res.data.message || "Failed to load parts");
+          setError("Failed to load parts");
         }
       } catch (err) {
         console.error(err);
@@ -29,40 +28,71 @@ export default function Parts() {
   }, []);
 
   if (loading) {
-    return <div className="p-6">Loading parts...</div>;
+    return (
+      <div className="pt-28 min-h-screen bg-black text-white flex items-center justify-center">
+        Loading parts...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+    return (
+      <div className="pt-28 min-h-screen bg-black text-red-500 flex items-center justify-center">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Spare Parts</h1>
+    <div className="pt-28 min-h-screen bg-black text-white px-6">
+      <div className="max-w-7xl mx-auto">
 
-      {parts.length === 0 ? (
-        <p>No spare parts available as of now.</p>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {parts.map((p) => (
-            <div key={p._id} className="bg-white p-4 w-full rounded shadow">
-              <img
-                src={`http://localhost:5000/uploads/${p.image}`}
-                alt={p.name}
-                className="w-72 h-72 object-cover rounded mb-3"
-              />
+        <h1 className="text-4xl font-semibold mb-12 text-center">
+          Spare Parts
+        </h1>
 
-              <h3 className="font-semibold text-lg">{p.name}</h3>
+        {parts.length === 0 ? (
+          <p className="text-center text-gray-400">
+            No spare parts available as of now.
+          </p>
+        ) : (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
 
-              <p className="text-gray-600">₹{p.price}</p>
+            {parts.map((p) => (
+              <div
+                key={p._id}
+                className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group border border-gray-800"
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={`http://localhost:5000/uploads/${p.image}`}
+                    alt={p.name}
+                    className="w-full h-64 object-cover group-hover:scale-105 transition duration-500"
+                  />
+                </div>
 
-              <p className="text-sm text-gray-500">
-                Category: {p.vehicle?.name}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold mb-2">
+                    {p.name}
+                  </h3>
+
+                  <p className="text-green-500 text-xl font-medium mb-2">
+                    ₹{p.price}
+                  </p>
+
+                  <p className="text-sm text-gray-400">
+                    Category:{" "}
+                    <span className="text-gray-300">
+                      {p.vehicle?.name || "General"}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            ))}
+
+          </div>
+        )}
+      </div>
     </div>
   );
 }

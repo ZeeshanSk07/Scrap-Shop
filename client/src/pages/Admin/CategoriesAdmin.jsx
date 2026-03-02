@@ -26,32 +26,65 @@ function CategoriesAdmin() {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">
-        Manage Vehicle Categories
+  <div className="min-h-screen bg-gray-950 text-white p-6 md:p-8">
+    <div className="max-w-5xl mx-auto">
+
+      {/* Page Title */}
+      <h2 className="text-3xl font-semibold mb-10">
+        Vehicle Categories
       </h2>
 
-      <form onSubmit={addCategory} className="bg-white p-6 rounded shadow mb-8">
-        <input
-          className="input"
-          placeholder="Category Name (Swift)"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+      {/* Add Category Card */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 md:p-8 mb-12">
+        <h3 className="text-lg font-medium mb-6 text-gray-300">
+          Add New Category
+        </h3>
 
-        <button className="bg-green-600 text-white px-4 py-2 rounded">
-          Add Category
-        </button>
-      </form>
+        <form
+          onSubmit={addCategory}
+          className="flex flex-col sm:flex-row gap-4"
+        >
+          <input
+            placeholder="Category Name (e.g. Swift, SUV, Sedan)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+            required
+          />
 
-      {categories.map((c) => (
-        <div key={c._id} className="bg-white p-4 mb-3 rounded shadow">
-          {c.name}
-        </div>
-      ))}
+          <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-lg font-semibold">
+            Add
+          </button>
+        </form>
+      </div>
+
+      {/* Categories List */}
+      <div>
+        <h3 className="text-lg font-medium mb-6 text-gray-300">
+          Existing Categories
+        </h3>
+
+        {categories.length === 0 ? (
+          <p className="text-gray-400">
+            No categories created yet.
+          </p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            {categories.map((c) => (
+              <div
+                key={c._id}
+                className="bg-gray-900 border border-gray-800 rounded-lg px-4 py-3 text-center hover:border-blue-600 transition"
+              >
+                {c.name}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default CategoriesAdmin;

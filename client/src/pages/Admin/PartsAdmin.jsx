@@ -72,112 +72,169 @@ function PartsAdmin() {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Manage Parts</h2>
+  <div className="min-h-screen bg-gray-950 text-white p-6 md:p-8">
+    <div className="max-w-7xl mx-auto">
 
-      {/* Add Part Form */}
-      <form onSubmit={addPart} className="bg-white p-6 rounded shadow mb-8">
-        <input
-          className="input"
-          placeholder="Part Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
+      {/* Page Title */}
+      <h2 className="text-3xl font-semibold mb-10">
+        Parts Management
+      </h2>
 
-        <select
-          className="input"
-          value={form.vehicle}
-          onChange={(e) => setForm({ ...form, vehicle: e.target.value })}
-          required
-        >
-          <option value="">Select Vehicle Category</option>
-          {categories.map((c) => (
-            <option key={c._id} value={c._id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+      {/* Add Part Card */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 md:p-8 mb-12">
+        <h3 className="text-lg font-medium mb-6 text-gray-300">
+          Add New Part
+        </h3>
 
-        <input
-          className="input"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) => setForm({ ...form, price: e.target.value })}
-          required
-        />
+        <form onSubmit={addPart} className="grid md:grid-cols-2 gap-6">
 
-        <input
-          className="input"
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          required
-        />
+          {/* Part Name */}
+          <input
+            placeholder="Part Name"
+            value={form.name}
+            onChange={(e) =>
+              setForm({ ...form, name: e.target.value })
+            }
+            className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+            required
+          />
 
-        <input type="file" ref={imageRef} required className="mb-3" />
+          {/* Category Select */}
+          <select
+            value={form.vehicle}
+            onChange={(e) =>
+              setForm({ ...form, vehicle: e.target.value })
+            }
+            className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 text-gray-300"
+            required
+          >
+            <option value="">Select Vehicle Category</option>
+            {categories.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
 
-        <button className="bg-green-600 text-white px-4 py-2 rounded">
-          Add Part
-        </button>
-      </form>
+          {/* Price */}
+          <input
+            type="number"
+            placeholder="Price"
+            value={form.price}
+            onChange={(e) =>
+              setForm({ ...form, price: e.target.value })
+            }
+            className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+            required
+          />
 
-      {/* Parts List */}
-      {parts.map((p) => (
-        <div key={p._id} className="bg-white p-4 mb-3 rounded shadow">
-          <p className="font-semibold">
-            <img
-              src={`http://localhost:5000/uploads/${p.image}`}
-              alt={p.name}
-              className="w-40 h-28 object-cover rounded mb-2"
-            />
+          {/* Description */}
+          <input
+            placeholder="Description"
+            value={form.description}
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
+            className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+            required
+          />
 
-            <p className="font-semibold">
-              {p.name} - ₹{p.price} ({p.vehicle?.name})
-            </p>
-          </p>
+          {/* File Upload */}
+          <input
+            type="file"
+            ref={imageRef}
+            required
+            className="md:col-span-2 text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+          />
 
-          <p>
-            Status:{" "}
-            {p.sold ? (
-              <span className="text-red-600 font-bold">Sold</span>
-            ) : (
-              <span className="text-green-600">Available</span>
-            )}
-          </p>
-
-          <div className="flex gap-2 mt-3">
-            {/* Edit Price */}
-            <button
-              onClick={() => updatePrice(p._id)}
-              className="bg-blue-600 text-white px-3 py-1 rounded"
-            >
-              Edit Price
-            </button>
-
-            {/* Mark Sold (only if not sold) */}
-            {!p.sold && (
-              <button
-                onClick={() => markSold(p._id)}
-                className="bg-yellow-600 text-white px-3 py-1 rounded"
-              >
-                Mark Sold
-              </button>
-            )}
-
-            {/* Delete */}
-            <button
-              onClick={() => deletePart(p._id)}
-              className="bg-red-600 text-white px-3 py-1 rounded"
-            >
-              Delete
+          {/* Button */}
+          <div className="md:col-span-2">
+            <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-lg font-semibold w-full md:w-auto">
+              Add Part
             </button>
           </div>
-        </div>
-      ))}
+        </form>
+      </div>
+
+      {/* Parts List */}
+      <div className="space-y-6">
+        {parts.map((p) => (
+          <div
+            key={p._id}
+            className="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+          >
+
+            {/* Left Section */}
+            <div className="flex flex-col sm:flex-row gap-5 sm:items-center">
+              <img
+                src={`http://localhost:5000/uploads/${p.image}`}
+                alt={p.name}
+                className="w-full sm:w-40 h-40 sm:h-28 object-cover rounded-lg"
+              />
+
+              <div>
+                <h4 className="text-lg font-semibold">
+                  {p.name}
+                </h4>
+
+                <p className="text-blue-400 font-medium">
+                  ₹{p.price}
+                </p>
+
+                <div className="flex flex-wrap gap-2 mt-2">
+
+                  {/* Category Badge */}
+                  <span className="px-3 py-1 text-xs rounded-full bg-purple-600/20 text-purple-400">
+                    {p.vehicle?.name || "General"}
+                  </span>
+
+                  {/* Status Badge */}
+                  <span
+                    className={`px-3 py-1 text-xs rounded-full ${
+                      p.sold
+                        ? "bg-red-600/20 text-red-400"
+                        : "bg-green-600/20 text-green-400"
+                    }`}
+                  >
+                    {p.sold ? "Sold" : "Available"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => updatePrice(p._id)}
+                className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+              >
+                Edit Price
+              </button>
+
+              {!p.sold && (
+                <button
+                  onClick={() => markSold(p._id)}
+                  className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+                >
+                  Mark Sold
+                </button>
+              )}
+
+              <button
+                onClick={() => deletePart(p._id)}
+                className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+              >
+                Delete
+              </button>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
     </div>
-  );
+  </div>
+);
 }
 
 export default PartsAdmin;

@@ -43,7 +43,6 @@ function VehiclesAdmin() {
   const updatePrice = async (id) => {
     const newPrice = prompt("Enter new price:");
     if (!newPrice) return;
-
     await API.put(`/vehicles/${id}/price`, { price: newPrice });
     fetchVehicles();
   };
@@ -55,102 +54,138 @@ function VehiclesAdmin() {
 
   const deleteVehicle = async (id) => {
     if (!window.confirm("Delete this vehicle?")) return;
-
     await API.delete(`/vehicles/${id}`);
     fetchVehicles();
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Manage Vehicles</h2>
+    <div className="min-h-screen bg-gray-950 text-white p-8">
+      <div className="max-w-7xl mx-auto">
 
-      {/* Add Vehicle Form */}
-      <form onSubmit={addVehicle} className="bg-white p-6 rounded shadow mb-8">
-        <input
-          className="input"
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
+        {/* Page Title */}
+        <h2 className="text-3xl font-semibold mb-10">
+          Vehicles Management
+        </h2>
 
-        <input
-          className="input"
-          type="number"
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) => setForm({ ...form, price: e.target.value })}
-          required
-        />
+        {/* Add Vehicle Card */}
+        <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 mb-12">
+          <h3 className="text-lg font-medium mb-6 text-gray-300">
+            Add New Vehicle
+          </h3>
 
-        <input
-          className="input"
-          placeholder="Description"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          required
-        />
+          <form onSubmit={addVehicle} className="grid md:grid-cols-2 gap-6">
 
-        <input type="file" ref={imageRef} required className="mb-3" />
-
-        <button className="bg-green-600 text-white px-4 py-2 rounded">
-          Add Vehicle
-        </button>
-      </form>
-
-      {/* Vehicles List */}
-      {vehicles.map((v) => (
-        <div key={v._id} className="bg-white p-4 mb-3 rounded shadow">
-          <p className="font-semibold">
-            <img
-              src={`http://localhost:5000/uploads/${v.image}`}
-              alt={v.name}
-              className="w-40 h-28 object-cover rounded mb-2"
+            <input
+              placeholder="Vehicle Name"
+              value={form.name}
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
+              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+              required
             />
 
-            <p className="font-semibold">
-              {v.name} - ₹{v.price}
-            </p>
-          </p>
+            <input
+              type="number"
+              placeholder="Price"
+              value={form.price}
+              onChange={(e) =>
+                setForm({ ...form, price: e.target.value })
+              }
+              className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+              required
+            />
 
-          <p>
-            Status:{" "}
-            {v.sold ? (
-              <span className="text-red-600 font-bold">Sold</span>
-            ) : (
-              <span className="text-green-600">Available</span>
-            )}
-          </p>
+            <input
+              placeholder="Description"
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+              className="md:col-span-2 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
+              required
+            />
 
-          <div className="flex gap-2 mt-3">
-            {/* Edit Price */}
-            <button
-              onClick={() => updatePrice(v._id)}
-              className="bg-blue-600 text-white px-3 py-1 rounded"
-            >
-              Edit Price
-            </button>
+            <input
+              type="file"
+              ref={imageRef}
+              required
+              className="md:col-span-2 text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+            />
 
-            {/* Mark Sold */}
-            {!v.sold && (
-              <button
-                onClick={() => markSold(v._id)}
-                className="bg-yellow-600 text-white px-3 py-1 rounded"
-              >
-                Mark Sold
+            <div className="md:col-span-2">
+              <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-3 rounded-lg font-semibold">
+                Add Vehicle
               </button>
-            )}
-
-            {/* Delete */}
-            <button
-              onClick={() => deleteVehicle(v._id)}
-              className="bg-red-600 text-white px-3 py-1 rounded"
-            >
-              Delete
-            </button>
-          </div>
+            </div>
+          </form>
         </div>
-      ))}
+
+        {/* Vehicles List */}
+        <div className="space-y-6">
+          {vehicles.map((v) => (
+            <div
+              key={v._id}
+              className="bg-gray-900 border border-gray-800 rounded-xl p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+            >
+              {/* Left Section */}
+              <div className="flex gap-6 items-center">
+                <img
+                  src={`http://localhost:5000/uploads/${v.image}`}
+                  alt={v.name}
+                  className="w-40 h-28 object-cover rounded-lg"
+                />
+
+                <div>
+                  <h4 className="text-lg font-semibold">
+                    {v.name}
+                  </h4>
+                  <p className="text-blue-400 font-medium">
+                    ₹{v.price}
+                  </p>
+
+                  <span
+                    className={`inline-block mt-2 px-3 py-1 text-xs rounded-full ${
+                      v.sold
+                        ? "bg-red-600/20 text-red-400"
+                        : "bg-green-600/20 text-green-400"
+                    }`}
+                  >
+                    {v.sold ? "Sold" : "Available"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 flex-wrap">
+                <button
+                  onClick={() => updatePrice(v._id)}
+                  className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+                >
+                  Edit Price
+                </button>
+
+                {!v.sold && (
+                  <button
+                    onClick={() => markSold(v._id)}
+                    className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+                  >
+                    Mark Sold
+                  </button>
+                )}
+
+                <button
+                  onClick={() => deleteVehicle(v._id)}
+                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-medium transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
     </div>
   );
 }

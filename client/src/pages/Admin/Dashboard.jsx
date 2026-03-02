@@ -1,67 +1,64 @@
-import React, { useState } from "react";
-import VehiclesAdmin from "./VehiclesAdmin";
-import CategoriesAdmin from "./CategoriesAdmin";
-import PartsAdmin from "./PartsAdmin";
+import React from "react";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const [activeTab, setActiveTab] = useState("vehicles");
-
-  const renderTab = () => {
-    switch (activeTab) {
-      case "vehicles":
-        return <VehiclesAdmin />;
-      case "categories":
-        return <CategoriesAdmin />;
-      case "parts":
-        return <PartsAdmin />;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div>
+      <h1 className="text-3xl font-semibold mb-10">
+        Admin Dashboard
+      </h1>
 
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      {/* Tabs */}
-      <div className="flex gap-4 mb-8">
-        <button
-          onClick={() => setActiveTab("vehicles")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "vehicles"
-              ? "bg-blue-600 text-white"
-              : "bg-white border"
-          }`}
+        <Link
+          to="vehicles"
+          className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-blue-600 transition"
         >
-          Vehicles For Sale
-        </button>
+          <h3 className="text-lg font-medium mb-2">
+            Vehicles
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Manage vehicles listed for sale.
+          </p>
+        </Link>
 
-        <button
-          onClick={() => setActiveTab("categories")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "categories"
-              ? "bg-blue-600 text-white"
-              : "bg-white border"
-          }`}
+        <Link
+          to="categories"
+          className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-blue-600 transition"
         >
-          Vehicle Categories
-        </button>
+          <h3 className="text-lg font-medium mb-2">
+            Categories
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Manage vehicle categories.
+          </p>
+        </Link>
 
-        <button
-          onClick={() => setActiveTab("parts")}
-          className={`px-4 py-2 rounded ${
-            activeTab === "parts"
-              ? "bg-blue-600 text-white"
-              : "bg-white border"
-          }`}
+        <Link
+          to="parts"
+          className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-blue-600 transition"
         >
-          Parts
-        </button>
+          <h3 className="text-lg font-medium mb-2">
+            Parts
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Manage spare parts inventory.
+          </p>
+        </Link>
+
+        <Link
+          to="sell-requests"
+          className="bg-gray-900 border border-gray-800 rounded-xl p-6 hover:border-blue-600 transition"
+        >
+          <h3 className="text-lg font-medium mb-2">
+            Sell Requests
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Review customer vehicle submissions.
+          </p>
+        </Link>
+
       </div>
-
-      {/* Active Section */}
-      {renderTab()}
     </div>
   );
 }
