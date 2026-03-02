@@ -37,16 +37,22 @@ export default function SellVehicle() {
 
     alert("Vehicle submitted successfully");
   };
-
+  const isValid = images.length >= 2;
   return (
     <form onSubmit={submit} className="p-6 space-y-3">
       <input name="ownerName" placeholder="Your Name" onChange={handleChange} className="border p-2 w-full" />
       <input name="phone" placeholder="Phone" onChange={handleChange} className="border p-2 w-full" />
       <input name="vehicleName" placeholder="Vehicle Name" onChange={handleChange} className="border p-2 w-full" />
+      <input name="price" placeholder="Price" onChange={handleChange} className="border p-2 w-full" />
       <input type="file" multiple accept="image/*" onChange={handleImages} className="w-full" />
-      <button className="bg-blue-600 text-white p-2 w-full rounded">
-        Submit
-      </button>
+      <button
+  disabled={!isValid}
+  className={`p-2 w-full rounded ${
+    isValid ? "bg-blue-600 text-white" : "bg-gray-400 text-gray-200"
+  }`}
+>
+  Submit
+</button>
     </form>
   );
 }

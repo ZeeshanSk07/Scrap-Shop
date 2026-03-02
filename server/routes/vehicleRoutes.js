@@ -1,9 +1,12 @@
 import express from "express";
 import Vehicle from "../models/Vehicle.js";
 import multer from "multer";
-import path from "path";
 
 const router = express.Router();
+
+/* =============================
+   MULTER CONFIG
+============================= */
 
 const storage = multer.diskStorage({
   destination: "uploads/",
@@ -14,24 +17,42 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ✅ Add Vehicle (Admin)
+/* =============================
+   ADD VEHICLE (ADMIN)
+============================= */
+
 router.post("/", upload.single("image"), async (req, res) => {
   try {
+    const { name, description, price } = req.body;
+
+    if (!req.file) {
+      return res.status(400).json({ message: "Image is required" });
+    }
+
+    if (!name || !description || !price) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const vehicle = new Vehicle({
-      name: req.body.name,
-      description: req.body.description,
-      price: req.body.price,
+      name,
+      description,
+      price,
       image: req.file.filename,
     });
 
     await vehicle.save();
-    res.status(201).json({ message: "Vehicle added successfully" });
+
+    res.status(201).json(vehicle);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: "Failed to add vehicle" });
   }
 });
 
-// ✅ Get Vehicles (Hide sold from marketplace)
+/* =============================
+   GET VEHICLES
+============================= */
+
 router.get("/", async (req, res) => {
   try {
     const isAdmin = req.query.admin === "true";
@@ -46,32 +67,65 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Edit Price
+/* =============================
+   UPDATE PRICE
+============================= */
+
 router.put("/:id/price", async (req, res) => {
   try {
-    await Vehicle.findByIdAndUpdate(req.params.id, {
-      price: req.body.price,
-    });
+    const { price } = req.body;
+
+    if (!price) {
+      return res.status(400).json({ message: "Price required" });
+    }
+
+    await Vehicle.findByIdAndUpdate(req.params.id, { price });
+
     res.json({ message: "Price updated successfully" });
   } catch (err) {
     res.status(500).json({ error: "Failed to update price" });
   }
 });
 
-// ✅ Mark Sold
+/* =============================
+   MARK SOLD
+============================= */
+
 router.put("/:id/sold", async (req, res) => {
   try {
-    await Vehicle.findByIdAndUpdate(req.params.id, { sold: true });
+    const vehicle = await Vehicle.findById(req.params.id);
+
+    if (!vehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    if (vehicle.sold) {
+      return res.status(400).json({ message: "Vehicle already sold" });
+    }
+
+    vehicle.sold = true;
+    await vehicle.save();
+
     res.json({ message: "Vehicle marked as sold" });
   } catch (err) {
     res.status(500).json({ error: "Failed to update status" });
   }
 });
 
-// ✅ Delete
+/* =============================
+   DELETE VEHICLE
+============================= */
+
 router.delete("/:id", async (req, res) => {
   try {
-    await Vehicle.findByIdAndDelete(req.params.id);
+    const vehicle = await Vehicle.findById(req.params.id);
+
+    if (!vehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    await vehicle.deleteOne();
+
     res.json({ message: "Vehicle deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete vehicle" });

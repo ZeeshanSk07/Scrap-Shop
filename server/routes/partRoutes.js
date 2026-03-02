@@ -50,8 +50,10 @@ router.get("/", async (req, res) => {
     const isAdmin = req.query.admin === "true";
 
     const parts = isAdmin
-      ? await Part.find().sort({ createdAt: -1 })
-      : await Part.find({ sold: false }).sort({ createdAt: -1 });
+      ? await Part.find().populate("vehicle").sort({ createdAt: -1 })
+      : await Part.find({ sold: false })
+          .populate("vehicle")
+          .sort({ createdAt: -1 });
 
     res.json(parts);
   } catch (err) {
@@ -75,6 +77,23 @@ router.put("/:id/price", async (req, res) => {
 router.put("/:id/sold", async (req, res) => {
   try {
     await Part.findByIdAndUpdate(req.params.id, { sold: true });
+    res.json({ message: "Part marked as sold" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+router.put("/:id/sold", async (req, res) => {
+  try {
+    const part = await Part.findById(req.params.id);
+
+    if (part.sold) {
+      return res.status(400).json({ message: "Already sold" });
+    }
+
+    part.sold = true;
+    await part.save();
+
     res.json({ message: "Part marked as sold" });
   } catch (err) {
     res.status(500).json({ error: "Failed to update status" });

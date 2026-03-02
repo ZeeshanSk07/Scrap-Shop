@@ -16,18 +16,31 @@ const upload = multer({ storage });
 // Submit Sell Request
 router.post("/", upload.array("images", 5), async (req, res) => {
   try {
-    const images = req.files.map((file) => file.filename);
+    console.log("BODY:", req.body);
+    console.log("FILES:", req.files);
+
+    if (!req.files || req.files.length < 2) {
+      return res.status(400).json({
+        error: "Minimum 2 images required"
+      });
+    }
+
+    const images = req.files.map(file => file.filename);
 
     const sell = new Sell({
-      title: req.body.title,
-      description: req.body.description,
+      ownerName: req.body.ownerName,
+      phone: req.body.phone,
+      vehicleName: req.body.vehicleName,
       price: req.body.price,
       images,
     });
 
     await sell.save();
+
     res.status(201).json({ message: "Sell request submitted" });
+
   } catch (err) {
+    console.error("SELL ERROR:", err);
     res.status(500).json({ error: "Failed to submit request" });
   }
 });

@@ -17,6 +17,11 @@ const AdminLayout = () => {
           <li><Link to="vehicles">Vehicles</Link></li>
           <li><Link to="categories">Vehicle Categories</Link></li>
           <li><Link to="parts">Parts</Link></li>
+          <li><Link to="/admin/sell-requests">
+  
+    Sell Requests
+  
+</Link></li>
         </ul>
       </div>
 

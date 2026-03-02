@@ -12,6 +12,7 @@ import Dashboard from "./pages/Admin/Dashboard";
 import VehiclesAdmin from "./pages/Admin/VehiclesAdmin";
 import CategoriesAdmin from "./pages/Admin/CategoriesAdmin";
 import PartsAdmin from "./pages/Admin/PartsAdmin";
+import AdminSellRequests from "./pages/Admin/AdminSellRequests";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="vehicles" element={<VehiclesAdmin />} />
           <Route path="categories" element={<CategoriesAdmin />} />
           <Route path="parts" element={<PartsAdmin />} />
+          <Route path="sell-requests" element={<AdminSellRequests />} />
         </Route>
       </Routes>
     </Router>

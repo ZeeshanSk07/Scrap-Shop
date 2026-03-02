@@ -9,17 +9,14 @@ export default function Parts() {
   useEffect(() => {
     const fetchParts = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/parts"
-        );
-        
+        const res = await axios.get("http://localhost:5000/api/parts");
+
         // ✅ Handle wrapped backend response
-        if (res.status = 200) {
+        if ((res.status = 200)) {
           setParts(res.data);
         } else {
           setError(res.data.message || "Failed to load parts");
         }
-
       } catch (err) {
         console.error(err);
         setError("Failed to load parts");
@@ -41,27 +38,26 @@ export default function Parts() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Spare Parts
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Spare Parts</h1>
 
       {parts.length === 0 ? (
         <p>No spare parts available as of now.</p>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {parts.map((part) => (
-            <div
-              key={part._id}
-              className="border rounded-lg p-4 shadow-sm bg-white hover:shadow-md transition"
-            >
-              <h2 className="text-lg font-semibold mb-2">
-                {part.name}
-              </h2>
-              <p className="text-gray-600 mb-2">
-                {part.description}
-              </p>
-              <p className="font-bold text-green-600">
-                ₹ {part.price}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {parts.map((p) => (
+            <div key={p._id} className="bg-white p-4 w-full rounded shadow">
+              <img
+                src={`http://localhost:5000/uploads/${p.image}`}
+                alt={p.name}
+                className="w-72 h-72 object-cover rounded mb-3"
+              />
+
+              <h3 className="font-semibold text-lg">{p.name}</h3>
+
+              <p className="text-gray-600">₹{p.price}</p>
+
+              <p className="text-sm text-gray-500">
+                Category: {p.vehicle?.name}
               </p>
             </div>
           ))}
