@@ -1,6 +1,13 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    navigate("/admin-login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 text-white flex">
 
@@ -80,6 +87,15 @@ const AdminLayout = () => {
           </NavLink>
 
         </nav>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="mt-auto bg-red-600 hover:bg-red-700 transition px-4 py-3 rounded-lg font-medium"
+        >
+          Logout
+        </button>
+
       </aside>
 
       {/* Main Content */}

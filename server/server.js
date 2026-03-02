@@ -3,11 +3,13 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import adminAuth from "./middleware/adminAuth.js";
 
 import vehicleRoutes from "./routes/vehicleRoutes.js";
 import partRoutes from "./routes/partRoutes.js";
 import sellRoutes from "./routes/sellRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import adminRoutes from "./routes/admin.js";
 
 dotenv.config();
 
@@ -37,3 +39,8 @@ app.use("/api/vehicles", vehicleRoutes);
 app.use("/api/parts", partRoutes);
 app.use("/api/sell", sellRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/admin", adminRoutes);
+
+app.use("/api/vehicles", adminAuth);
+app.use("/api/parts", adminAuth);
+app.use("/api/categories", adminAuth);
